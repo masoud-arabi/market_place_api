@@ -3,8 +3,9 @@ class Api::V1::ProductsController < ApplicationController
     before_action :check_login, only: %i[create]
     before_action :product_owner, only: %i[update destroy]
 
-    def show
-        render json: ProductSerializer.new(@product
+    def show 
+        options = {include: [:user]}
+        render json: ProductSerializer.new(@product, options
         ).serializable_hash
     end
 
