@@ -35,4 +35,23 @@ class ProductTest < ActiveSupport::TestCase
     products(:another_tv), products(:one), products(:two)]
   end
 
+  test 'search should not find "videogame" and "100" as min price' do 
+    search_hash = {keyword: 'videogame', min_price: 100}
+    assert Product.search(search_hash).empty?
+  end
+
+  test 'search should find cheap TV' do 
+    search_hash = { keyword: 'Cheapi', min_price: 50, max_price: 150 }
+    assert_equal Product.search(search_hash), [products(:last_tv)]
+  end
+
+  test 'should get all products when no parameters' do 
+    search_hash = {}
+    assert_equal Product.search(search_hash), Product.all.to_a
+  end
+  test 'search should filter by product ids' do 
+    search_hash = {product_ids: [products(:one).id]}
+    assert_equal [products(:one)], Product.search(search_hash)
+  end
+
 end
