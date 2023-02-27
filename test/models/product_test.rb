@@ -25,8 +25,14 @@ class ProductTest < ActiveSupport::TestCase
 
   test "should filter products by price equal or lower" do
     assert_equal 2, Product.lower_or_equal_to_price(200).count
-    assert_equal [products(:another_tv), products(:last_tv)],
+    assert_equal [products(:another_tv), products(:last_tv)].sort,
     Product.lower_or_equal_to_price(200)
+  end
+
+  test "should sort products by data creation" do
+    products(:two).touch
+    assert_equal Product.recent.to_a, [products(:last_tv),
+    products(:another_tv), products(:one), products(:two)]
   end
 
 end
