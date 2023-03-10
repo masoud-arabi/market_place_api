@@ -9,6 +9,7 @@ class Api::V1::OrdersController < ApplicationController
     
     def show 
         @order = current_user.orders.find(params[:id])
+        @order.set_total!
         if @order
             options = {include: [:products]}
             @order = OrderSerializer.new(@order, options
