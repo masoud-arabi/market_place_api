@@ -3,17 +3,17 @@ require "test_helper"
 class OrderTest < ActiveSupport::TestCase
   setup do 
     @order = orders(:one)
-    @product2 = products(:one)
-    @product1 = products(:two)
+    @product1 = products(:one)
+    @product2 = products(:two)
   end
 
-  test "should set a total" do
-    order = Order.new user_id: @order.user.id
-    order.products << products(:one) 
-    order.products << products(:two)
-    order.save
-    assert_equal (@product1.price + @product2.price), order.total
-  end
+  # test "should set a total" do
+  #   order = Order.new user_id: @order.user.id
+  #   order.products << products(:one) 
+  #   order.products << products(:two)
+  #   order.save
+  #   assert_equal (@product1.price + @product2.price), order.total
+  # end
 
   test 'builds 2 placements for the order' do
     @order.build_placements_with_product_ids_and_quantities([
@@ -23,6 +23,24 @@ class OrderTest < ActiveSupport::TestCase
     assert_difference('Placement.count', 2) do
       @order.save
     end
+  end
+
+  test 'an order should command not too much product than available' do 
+    @order.placements << Placement.new(product_id: @product1.id, quantity: (1 + @product1.quantity))
+    puts @order.placements.last.quantity
+    puts @order.errors[@order.placements.last.product.title.to_s]
+    assert_not @order.valid? 
+  end
+
+  test 'should set total' do 
+    @order.placements = [
+      Placement.new(product_id: @product1.id, quantity: 2),
+      Placement.new(product_id: @product2.id, quantity: 2),
+    ]
+    @order.set_total!
+    expected_total = (@product1.price * 2) + (@product2.price * 2)
+    puts expected_total
+    assert_equal expected_total, @order.total
   end
 
 end

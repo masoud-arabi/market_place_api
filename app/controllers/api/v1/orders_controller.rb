@@ -9,6 +9,7 @@ class Api::V1::OrdersController < ApplicationController
     
     def show 
         @order = current_user.orders.find(params[:id])
+        @order.set_total!
         if @order
             options = {include: [:products]}
             @order = OrderSerializer.new(@order, options
@@ -33,6 +34,6 @@ class Api::V1::OrdersController < ApplicationController
     private 
 
     def order_params 
-        params.require(:order).permit(product_ids_and_quantities:[:product_id, :quantity])
+        params.require(:order).permit(:total, product_ids_and_quantities:[:product_id, :quantity])
     end
 end
