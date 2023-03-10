@@ -8,8 +8,10 @@ class Order < ApplicationRecord
   
   validates :total, presence: true, numericality:{ greater_than_or_equal_to: 0}
   validates_with EnoughProductsValidator
+  
   def set_total!
-    self.total = products.map(&:price).sum
+    # self.total = products.map(&:price).sum
+    self.total = self.placements.map{ |placement| placement.product.price * placement.quantity }.sum
   end
   
   def build_placements_with_product_ids_and_quantities(product_ids_and_quantities)

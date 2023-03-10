@@ -32,4 +32,15 @@ class OrderTest < ActiveSupport::TestCase
     assert_not @order.valid? 
   end
 
+  test 'should set total' do 
+    @order.placements = [
+      Placement.new(product_id: @product1.id, quantity: 2),
+      Placement.new(product_id: @product2.id, quantity: 2),
+    ]
+    @order.set_total!
+    expected_total = (@product1.price * 2) + (@product2.price * 2)
+    puts expected_total
+    assert_equal expected_total, @order.total
+  end
+
 end
