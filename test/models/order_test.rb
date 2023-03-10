@@ -3,8 +3,8 @@ require "test_helper"
 class OrderTest < ActiveSupport::TestCase
   setup do 
     @order = orders(:one)
-    @product2 = products(:one)
-    @product1 = products(:two)
+    @product1 = products(:one)
+    @product2 = products(:two)
   end
 
   test "should set a total" do
@@ -23,6 +23,13 @@ class OrderTest < ActiveSupport::TestCase
     assert_difference('Placement.count', 2) do
       @order.save
     end
+  end
+
+  test 'an order should command not too much product than available' do 
+    @order.placements << Placement.new(product_id: @product1.id, quantity: (1 + @product1.quantity))
+    puts @order.placements.last.quantity
+    puts @order.errors[@order.placements.last.product.title.to_s]
+    assert_not @order.valid? 
   end
 
 end
