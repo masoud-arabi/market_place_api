@@ -53,3 +53,5 @@ end
 gem "jwt", "~> 2.7"
 
 gem "faker", "~> 3.1"
+
+gem "kaminari", "~> 1.2"

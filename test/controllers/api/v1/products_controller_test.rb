@@ -14,9 +14,12 @@ class Api::V1::ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @product.user.id.to_s, json_response.dig(:data, :relationships, :user, :data, :id)
     assert_equal @product.user.email, json_response.dig(:included, 0, :attributes, :email)    
   end
-  test 'should show products' do 
+
+  test 'should show products' do
     get api_v1_products_url, as: :json
     assert_response :success
+    json_response = JSON.parse(response.body, symbolize_names: true)
+    assert_json_response_is_paginated json_response
   end
 
   test 'should create product' do 
@@ -69,5 +72,4 @@ class Api::V1::ProductsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :forbidden 
   end
-
 end
