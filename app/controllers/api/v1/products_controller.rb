@@ -24,7 +24,6 @@ class Api::V1::ProductsController < ApplicationController
         else
             render json: @product.errors, status: :unprocessable_entity
         end 
-
     end
 
     def update 

@@ -1,7 +1,6 @@
 module Paginable 
     protected 
 
-    
     def get_links_serialaizer_optiins(links_paths, collection)
         {
             links:{
