@@ -42,5 +42,4 @@ class OrderTest < ActiveSupport::TestCase
     puts expected_total
     assert_equal expected_total, @order.total
   end
-
 end

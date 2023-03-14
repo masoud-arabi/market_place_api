@@ -53,5 +53,4 @@ class ProductTest < ActiveSupport::TestCase
     search_hash = {product_ids: [products(:one).id]}
     assert_equal [products(:one)], Product.search(search_hash)
   end
-
 end
